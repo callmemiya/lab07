@@ -1,0 +1,36 @@
+language: cpp
+jobs:
+  include:
+  - os: osx
+    script:
+    - cmake -H. -B_build
+    - cmake --build _build
+    - cd _build
+    - cpack -G DragNDrop
+    - cd ..
+  - os: linux
+    script:
+    - cmake -H. -B_build
+    - cmake --build _build
+    - cd _build
+    - cpack -G DEB
+    - cpack -G RPM
+    - cd ..
+addons:
+  apt:
+    packages:
+    - cmake
+    - cmake-data
+    - rpm
+deploy:
+  provider: releases
+  api_key: bf5ce1e1255400f7ecddf4991d37c826c210bc41
+  file:
+    - ./_build/print-0.1.0.0-Darwin.dmg
+    - ./_build/print-0.1.0.0-Linux.deb
+    - ./_build/print-0.1.0.0-Linux.rpm
+  skip_cleanup: true
+  on:
+    tags: true
+
+
